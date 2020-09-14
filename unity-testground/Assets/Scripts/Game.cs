@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    //Array[] keys = new Array[10];
     int _gameNumber = 1;
     bool _gameReady;
-    //KeyCode[] keys;
+
     private void Start()
     {
         _gameReady = true;
