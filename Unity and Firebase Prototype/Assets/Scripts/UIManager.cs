@@ -13,13 +13,31 @@ public class UIManager : MonoBehaviour
     // Light Blue           1A73E8
     //
 
-    void Start()
+    public GameObject registerForm, loginForm, statusForm;
+
+    public void EnableRegisterForm()
     {
-        
+        registerForm.SetActive(true);
+        loginForm.SetActive(false);
+        statusForm.SetActive(false);
     }
 
-    void Update()
+    public void EnableLoginForm()
     {
-        
+        registerForm.SetActive(false);
+        loginForm.SetActive(true);
+        statusForm.SetActive(false);
+    }
+
+    public void EnableStatusForm()
+    {
+        registerForm.SetActive(false);
+        loginForm.SetActive(false);
+        statusForm.SetActive(true);
+    }
+
+    public void RegisterSuccessful()
+    {
+        Debug.Log("Holy shit it worked!");
     }
 }
