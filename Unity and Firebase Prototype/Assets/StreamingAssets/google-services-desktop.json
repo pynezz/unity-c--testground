@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "149059022872",
+    "firebase_url": "https://unity-firebase-prototype.firebaseio.com",
+    "project_id": "unity-firebase-prototype",
+    "storage_bucket": "unity-firebase-prototype.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149059022872:android:27bbbfa8d86face29c136d",
+        "android_client_info": {
+          "package_name": "com.kadamsrod.UnityandFirebasePrototype"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149059022872-pdu16g2kuai0mcu4gvfn1n962l84vam6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx2kXsmwyf7obIOkjkxijk00cDGhm_G90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "149059022872-pdu16g2kuai0mcu4gvfn1n962l84vam6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
