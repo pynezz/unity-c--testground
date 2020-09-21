@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,31 +14,42 @@ public class UIManager : MonoBehaviour
     // Light Blue           1A73E8
     //
 
-    public GameObject registerForm, loginForm, statusForm;
+    public GameObject registerForm, loginForm, profilePage;
+    public Text userName, userMail, userScore, titleText, outerTitleText;
+    public int UIscore;
 
     public void EnableRegisterForm()
     {
         registerForm.SetActive(true);
         loginForm.SetActive(false);
-        statusForm.SetActive(false);
+        profilePage.SetActive(false);
     }
 
     public void EnableLoginForm()
     {
         registerForm.SetActive(false);
         loginForm.SetActive(true);
-        statusForm.SetActive(false);
+        profilePage.SetActive(false);
     }
 
-    public void EnableStatusForm()
+    public void EnableProfilePage()
     {
         registerForm.SetActive(false);
         loginForm.SetActive(false);
-        statusForm.SetActive(true);
+        profilePage.SetActive(true);
     }
 
-    public void RegisterSuccessful()
+    public void InitiateProfilePage(string username, string email)
     {
-        Debug.Log("Holy shit it worked!");
+        outerTitleText.gameObject.SetActive(false);
+        userName.text = username;
+        userMail.text = email;
+        titleText.text = "Welcome " + username + "!";
+    }
+
+    public void UpdateUserScore(int score)
+    {
+        UIscore = score;
+        userScore.text = score.ToString();
     }
 }

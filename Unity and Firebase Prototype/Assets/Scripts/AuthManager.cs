@@ -4,10 +4,21 @@ using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using UnityEngine.UI;
+using Firebase.Unity.Editor;
+using Firebase.Database;
+using UnityEngine.Assertions.Must;
 
 public class AuthManager : MonoBehaviour
 {
     #region Variables
+
+    public GameObject uiManager;
+    public GameObject gameManager;
+
+    public DatabaseReference reference;
+
+    public int score = 0;
+
     // Firebase
 
     [Header("Firebase")]
@@ -35,6 +46,7 @@ public class AuthManager : MonoBehaviour
     #region Unity Methods
     private void Awake()
     {
+        Debug.Log("Firing up Firebase..");
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             dependencyStatus = task.Result;
@@ -54,9 +66,47 @@ public class AuthManager : MonoBehaviour
     #region Custom Methods
 
     void InitializeFirebase()
-    {
-        Debug.Log("Firing up Firebase..");
+    {        
         auth = FirebaseAuth.DefaultInstance;
+        Debug.Log("Firebase Auth active");
+        Debug.Log("Initializing Firebase Database");
+        // Set up the Editor before calling into the realtime database.
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://unity-firebase-prototype.firebaseio.com/");
+
+        // Get the root reference location of the database.
+        reference = FirebaseDatabase.DefaultInstance.RootReference;
+        Debug.Log("Firebase Database active");
+    }
+
+    /*public void LoadData()
+    {
+        //var task = FirebaseDatabase.DefaultInstance.GetReference("user_1").
+            
+        FirebaseDatabase.DefaultInstance.GetReference("users").Child("user_1").Child("score").GetValueAsync().ContinueWith(task => {
+          if (task.IsFaulted)
+          {
+                Debug.LogError("Task failed " + task);
+          }
+          else if (task.IsCompleted)
+          {
+                DataSnapshot snapshot = task.Result;
+                Debug.Log(snapshot.Value);
+                uiManager.GetComponent<UIManager>().userScore.text = task.Result.Value.ToString();
+                Debug.Log("Score: " + score.ToString() + snapshot.Value.GetHashCode().ToString());
+          }
+      });
+        Debug.Log("Data loaded");
+    }*/
+
+    /*private void GameManager_ValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        uiManager.GetComponent<UIManager>().userScore.text = e.Snapshot.Child("users").Child("score").GetValue(true).ToString();
+    }*/
+
+    public void SaveData()
+    {
+        reference.Child("users").Child("user_1").Child("score").SetValueAsync(score);
+        Debug.Log("Saved score: " + score + " to database");
     }
 
     public void LoginButton()
@@ -117,6 +167,23 @@ public class AuthManager : MonoBehaviour
             Debug.LogFormat("User signed in sucessfully: {0} ({1})", user.DisplayName, user.Email);
             warningLoginText.text = "";
             confirmLoginText.text = "Logged in!";
+            var uiMan = uiManager.GetComponent<UIManager>();
+            uiMan.EnableProfilePage();
+            uiMan.InitiateProfilePage(user.DisplayName, user.Email);
+            warningRegText.text = "";
+            Debug.Log("Trying to load data..");
+            StartCoroutine(LoadScore());
+        }
+    }
+
+    IEnumerator LoadScore()
+    {
+        var getTask = FirebaseDatabase.DefaultInstance.GetReference("users").Child("user_1").Child("score").GetValueAsync();
+        yield return new WaitUntil(() => getTask.IsCompleted || getTask.IsFaulted);
+        if (getTask.IsCompleted)
+        {
+            uiManager.GetComponent<UIManager>().userScore.text = getTask.Result.Value.ToString();
+            Debug.Log("Data loaded successfully!");
         }
     }
 
@@ -184,6 +251,9 @@ public class AuthManager : MonoBehaviour
                     }
                     else
                     {
+                        var uiMan = uiManager.GetComponent<UIManager>();
+                        uiMan.EnableProfilePage();
+                        uiMan.InitiateProfilePage(username, email);
                         Debug.Log("IT WORKED!" + " Username: " + username);
                         warningRegText.text = "";
                     }
