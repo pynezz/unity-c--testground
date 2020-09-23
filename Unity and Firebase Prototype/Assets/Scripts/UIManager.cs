@@ -49,7 +49,6 @@ public class UIManager : MonoBehaviour
 
     public void UpdateUserScore(int score)
     {
-        UIscore = score;
         userScore.text = score.ToString();
     }
 }
